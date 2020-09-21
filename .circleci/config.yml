@@ -1,0 +1,14 @@
+import requests
+from bs4 import BeautifulSoup
+
+def get_reviews(s,url):
+    s.headers['User-Agent'] = 'Mozilla/5.0'
+    response = s.get(url)
+    soup = BeautifulSoup(response.text,"lxml")
+    return soup.find_all("div",{"data-hook":"review-collapsed"})
+
+if __name__ == '__main__':
+    link = 'https://www.amazon.com/Python-Crash-Course-Hands-Project-Based/dp/1593276036/ref=sr_1_3?ie=UTF8&qid=1541450645&sr=8-3&keywords=python'    
+    with requests.Session() as s:
+        for review in get_reviews(s,link):
+            print(f'{review.text}\n')
